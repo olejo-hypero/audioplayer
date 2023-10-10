@@ -157,7 +157,7 @@ const audioFn = () => {
               ></use>
             </svg>
           </div>
-          <img src="./images/${track.image}" alt="" class="music-track__image" />
+          <img src="../images/${track.image}" alt="" class="music-track__image" />
         </div>
         <div class="music-track__title">${track.name}</div>
         <div class="music-track__artist">${track.artist}</div>
@@ -166,7 +166,7 @@ const audioFn = () => {
           <span class="music-track__time-line"></span>
           <div id="audio-duration-time-${index}" class="music-track__time-duration"></div>
         </div>
-        <audio id="music-track-audio-${index}" preload="metadata" src="./songs/${playlistArray[index].src}" class="music-track__audio"></audio>
+        <audio id="music-track-audio-${index}" preload="metadata" src="../songs/${playlistArray[index].src}" class="music-track__audio"></audio>
       </div>`;
       playlist.insertAdjacentHTML('beforeend', trackHTML);
 
@@ -179,7 +179,7 @@ const audioFn = () => {
       const audioTag = document.querySelector(`#music-track-audio-${index}`);
       audioCurrentTag.innerText = '0:00';
 
-      mainAudio.addEventListener('loadeddata', (e) => {
+      mainAudio.addEventListener('loadedmetadata', (e) => {
         const durationTime = audioTag.duration; // Длительность аудио в секундах
         const minutes = Math.floor(durationTime / 60);
         const seconds = Math.floor(durationTime % 60);
@@ -199,7 +199,7 @@ const audioFn = () => {
     if (self === playingTrack && !mainAudio.paused) {
       stopMusic();
     } else {
-      loadMusic(musicId);
+      loadMusic(musicId, false);
       playMusic();
     }
     playMusicFromPlayList();
@@ -263,12 +263,14 @@ const audioFn = () => {
   });
 
   // Загрузка информации о аудио
-  const loadMusic = (index) => {
-    image.src = `./images/${playlistArray[index].image}`;
+  const loadMusic = (index, load = true) => {
+    image.src = `../images/${playlistArray[index].image}`;
     name.innerText = playlistArray[index].name;
     artist.innerText = playlistArray[index].artist;
-    mainAudio.src = `./songs/${playlistArray[index].src}`;
-    mainAudio.load();
+    if (load) {
+      mainAudio.src = `../songs/${playlistArray[index].src}`;
+      mainAudio.load();
+    }
   };
 
   window.addEventListener('load', () => {
