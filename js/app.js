@@ -157,7 +157,7 @@ const audioFn = () => {
               ></use>
             </svg>
           </div>
-          <img src="./images/${track.image}" alt="" class="music-track__image" />
+          <img src="../images/${track.image}" alt="" class="music-track__image" />
         </div>
         <div class="music-track__title">${track.name}</div>
         <div class="music-track__artist">${track.artist}</div>
@@ -166,7 +166,7 @@ const audioFn = () => {
           <span class="music-track__time-line"></span>
           <div id="audio-duration-time-${index}" class="music-track__time-duration"></div>
         </div>
-        <audio id="music-track-audio-${index}" preload="metadata" src="./songs/${playlistArray[index].src}" class="music-track__audio"></audio>
+        <audio id="music-track-audio-${index}" preload="metadata" src="../songs/${playlistArray[index].src}" class="music-track__audio"></audio>
       </div>`;
       playlist.insertAdjacentHTML('beforeend', trackHTML);
 
@@ -198,8 +198,10 @@ const audioFn = () => {
     localStorage.setItem('current_song_id', musicId);
     if (self === playingTrack && !mainAudio.paused) {
       stopMusic();
+    } else if (self === playingTrack && mainAudio.paused) {
+      playMusic();
     } else {
-      loadMusic(musicId, false);
+      loadMusic(musicId);
       playMusic();
     }
     playMusicFromPlayList();
@@ -263,14 +265,12 @@ const audioFn = () => {
   });
 
   // Загрузка информации о аудио
-  const loadMusic = (index, load = true) => {
-    image.src = `./images/${playlistArray[index].image}`;
+  const loadMusic = (index) => {
+    image.src = `../images/${playlistArray[index].image}`;
     name.innerText = playlistArray[index].name;
     artist.innerText = playlistArray[index].artist;
-    if (load) {
-      mainAudio.src = `./songs/${playlistArray[index].src}`;
-      mainAudio.load();
-    }
+    mainAudio.src = `../songs/${playlistArray[index].src}`;
+    mainAudio.load();
   };
 
   window.addEventListener('load', () => {
